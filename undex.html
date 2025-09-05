@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وزارة الزراعة</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // ضع هنا config مشروعك من Firebase
+    const firebaseConfig = {
+      apiKey: "API_KEY_HERE",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID",
+      storageBucket: "PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+  </script>
+</head>
+<body>
+  <!-- شاشة تسجيل الدخول -->
+  <div id="auth-section">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="signUp()">تسجيل جديد</button>
+    <button onclick="signIn()">تسجيل الدخول</button>
+    <button onclick="googleSignIn()">تسجيل دخول Google</button>
+  </div>
+
+  <!-- محتوى المشروع -->
+  <div id="project-section" style="display:none;">
+    <header>
+      <p id="user-info"></p>
+      <button onclick="signOut()">تسجيل خروج</button>
+    </header>
+    
+    <main>
+      <h1>مرحباً بكم في مشروع وزارة الزراعة</h1>
+      <p>هنا محتوى المشروع الكامل يظهر بعد تسجيل الدخول.</p>
+      <!-- أضف باقي محتوى مشروعك هنا -->
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
