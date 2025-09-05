@@ -1,68 +1,54 @@
-let currentLang = "ar";
-let isDark = false;
+function signUp() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-// بيانات تسجيل الدخول (تجريبية)
-const validUser = { username: "admin", password: "1234" };
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      alert("تم التسجيل بنجاح!");
+      updateUI(userCredential.user);
+    })
+    .catch(error => alert(error.message));
+}
 
-function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
-  const error = document.getElementById("loginError");
+function signIn() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-  if (user === validUser.username && pass === validUser.password) {
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("homePage").classList.remove("hidden");
-    error.textContent = "";
-  } else {
-    error.textContent = currentLang === "ar" ? "خطأ في تسجيل الدخول" : "Login failed";
+  auth.signInWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      alert("تم تسجيل الدخول!");
+      updateUI(userCredential.user);
+    })
+    .catch(error => alert(error.message));
+}
+
+function googleSignIn() {
+  auth.signInWithPopup(provider)
+    .then(result => {
+      alert("تم تسجيل الدخول بـ Google!");
+      updateUI(result.user);
+    })
+    .catch(error => alert(error.message));
+}
+
+function signOut() {
+  auth.signOut().then(() => {
+    alert("تم تسجيل الخروج!");
+    document.getElementById('auth-section').style.display = "block";
+    document.getElementById('project-section').style.display = "none";
+  });
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) updateUI(user);
+  else {
+    document.getElementById('auth-section').style.display = "block";
+    document.getElementById('project-section').style.display = "none";
   }
-}
+});
 
-function openPage(pageId) {
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  document.getElementById(pageId).classList.remove("hidden");
-}
-
-// تبديل اللغة
-function toggleLanguage() {
-  if (currentLang === "ar") {
-    currentLang = "en";
-    document.documentElement.lang = "en";
-    document.documentElement.dir = "ltr";
-
-    document.getElementById("title").textContent = "Ministry of Agriculture App";
-    document.getElementById("loginTitle").textContent = "Login";
-    document.getElementById("username").placeholder = "Username";
-    document.getElementById("password").placeholder = "Password";
-    document.getElementById("loginBtn").textContent = "Login";
-    document.getElementById("welcome").textContent = "Welcome!";
-    document.getElementById("ordersBtn").textContent = "Orders";
-    document.getElementById("cartBtn").textContent = "Cart";
-    document.getElementById("uploadBtn").textContent = "Upload Documents";
-    document.getElementById("assistantBtn").textContent = "Smart Assistant";
-    document.getElementById("langBtn").textContent = "عربي";
-  } else {
-    currentLang = "ar";
-    document.documentElement.lang = "ar";
-    document.documentElement.dir = "rtl";
-
-    document.getElementById("title").textContent = "تطبيق وزارة الزراعة";
-    document.getElementById("loginTitle").textContent = "تسجيل الدخول";
-    document.getElementById("username").placeholder = "اسم المستخدم";
-    document.getElementById("password").placeholder = "كلمة المرور";
-    document.getElementById("loginBtn").textContent = "دخول";
-    document.getElementById("welcome").textContent = "أهلاً بك!";
-    document.getElementById("ordersBtn").textContent = "الطلبات";
-    document.getElementById("cartBtn").textContent = "سلة المشتريات";
-    document.getElementById("uploadBtn").textContent = "رفع المستندات";
-    document.getElementById("assistantBtn").textContent = "المساعد الذكي";
-    document.getElementById("langBtn").textContent = "English";
-  }
-}
-
-// تبديل الوضع المظلم والضوئي
-function toggleTheme() {
-  isDark = !isDark;
-  document.body.classList.toggle("dark", isDark);
-  document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
-                            }
+function updateUI(user) {
+  document.getElementById('auth-section').style.display = "none";
+  document.getElementById('project-section').style.display = "block";
+  document.getElementById('user-info').innerText = "مرحباً، " + (user.displayName || user.email);
+               }
